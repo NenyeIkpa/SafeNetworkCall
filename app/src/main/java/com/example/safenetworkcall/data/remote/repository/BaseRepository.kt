@@ -1,7 +1,6 @@
 package com.example.safenetworkcall.data.remote.repository
 
 import android.util.Log
-import com.example.safenetworkcall.data.remote.model.Company
 import com.example.safenetworkcall.data.remote.model.SignUpResponse
 import com.example.safenetworkcall.utils.Resource
 import com.squareup.moshi.Moshi
@@ -13,10 +12,10 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
+import java.lang.StringBuilder
 
 
-
-
+//sample1
 abstract class BaseRepository {
 
     suspend fun <T> safeApiCall(apiToBeCalled: suspend () -> Response<T>) : Resource<T> {
@@ -53,5 +52,6 @@ abstract class BaseRepository {
             null
         }
     }
+
 }
 

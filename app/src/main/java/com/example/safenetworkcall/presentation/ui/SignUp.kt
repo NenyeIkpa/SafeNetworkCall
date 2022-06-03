@@ -64,7 +64,7 @@ class SignUp : Fragment() {
             binding.supplierRegistrationProgressBar.visibility = View.VISIBLE
             val firstName = binding.etFirstNameSupplierSignUp.text.toString()
             val lastName = binding.etLastNameSupplierSignUp.text.toString()
-           // val age = binding.etAgeSupplierSignUp.text.toString().toInt()
+            val age = binding.etAgeSupplierSignUp.text.toString().toInt()
             val gender = binding.sexAutoTextView.text.toString()
             val email = binding.etEmailSupplierSignUp.text.toString()
             val companyName = binding.companyAutoTextView.text.toString()
@@ -73,9 +73,9 @@ class SignUp : Fragment() {
             val confirmPassword = binding.etConfirmPasswordSupplierSignUp.text.toString()
             val phoneNumber = binding.etPhoneSupplierSignUp.text.toString()
             val location = binding.etAddressSupplierSignUp.text.toString()
-//            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age, gender, email, password, confirmPassword, phoneNumber, Location(location)))
+            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age, gender, email, password, confirmPassword, phoneNumber, Location(location)))
 
-            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User("Firstname", "Lastname", 30, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
+//            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User("Firstname", "Lastname", 30, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
 
             Log.d("check", "onViewCreated: $userInfo ")
 
