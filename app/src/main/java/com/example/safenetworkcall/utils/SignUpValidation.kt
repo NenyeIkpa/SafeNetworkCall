@@ -20,11 +20,15 @@ fun validateLastNameInput(lastName: String): Boolean {
     }
     return true
 }
-fun validateAgeInput(age: Int): Boolean {
-        if (age > 17 || age < 99) {
-            return true
+fun validateAgeInput(age: Int): Int {
+        if (age == 0)
+            return 1
+        else if ( age < 17)
+            return 2
+        if (age > 99) {
+            return 3
         }
-    return false
+    return 0
 }
 fun validateEmailInput(email: String): Boolean {
     if (email.isEmpty() || !email.matches(EMAIL_PATTERN)) {

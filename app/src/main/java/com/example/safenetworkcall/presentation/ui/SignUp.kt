@@ -17,6 +17,8 @@ import com.example.safenetworkcall.data.remote.model.User
 import com.example.safenetworkcall.databinding.FragmentSignUpBinding
 import com.example.safenetworkcall.presentation.viewmodel.SignUpViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.NumberFormatException
 
@@ -28,6 +30,7 @@ class SignUp : Fragment() {
     private val viewModel: SignUpViewModel by viewModels()
     private lateinit var userInfo: SignUpUser
     private val companiesById = hashMapOf<String, String>()
+    private  val Errors = mutableSetOf<TextInputLayout>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,12 +63,18 @@ class SignUp : Fragment() {
         }
 
         binding.supplierSignupBtn.setOnClickListener {
+            clearErrors()//clear errors once you click on sign up,
+            // then it there is any other errors it will be shown
             binding.supplierSignupBtn.isEnabled = false
             binding.supplierSignupBtn.text = "Registering"
             binding.supplierRegistrationProgressBar.visibility = View.VISIBLE
             val firstName = binding.etFirstNameSupplierSignUp.text.toString()
             val lastName = binding.etLastNameSupplierSignUp.text.toString()
-            val age =  binding.etAgeSupplierSignUp.text.toString().toInt()
+            val age = if(binding.etAgeSupplierSignUp.text.toString().isBlank())
+                0 else binding.etAgeSupplierSignUp.text.toString().toInt()
+            //note that you cannot call toInt() method on an empty string
+            // e.g "".toInt() will throw exception
+            //so instead just check if it is empty or check when value == "" then assign 0 to age
             val gender = binding.sexAutoTextView.text.toString()
             val email = binding.etEmailSupplierSignUp.text.toString()
             val companyName = binding.companyAutoTextView.text.toString()
@@ -74,68 +83,57 @@ class SignUp : Fragment() {
             val confirmPassword = binding.etConfirmPasswordSupplierSignUp.text.toString()
             val phoneNumber = binding.etPhoneSupplierSignUp.text.toString()
             val location = binding.etAddressSupplierSignUp.text.toString()
-//            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age.toInt(), gender, email, password, confirmPassword, phoneNumber, Location(location)))
+//          userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age.toInt(), gender, email, password, confirmPassword, phoneNumber, Location(location)))
 
             userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User("Firstname", "Lastname", age, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
 
             Log.d("check", "onViewCreated: $userInfo ")
 
-            if (!validateFirstNameInput(firstName)) {
-                binding.etFirstNameSupplierSignUp.error = "Should start with a capital letter, at least 3 character"
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            if (!validateFirstNameInput(firstName)){
+                setError(binding.supplierFirstNameContainer,
+                    "Should start with a capital letter, at least 3 character")
+                showSignUpButton()//reduce tautology in code
             }
             if (!validateLastNameInput(lastName)) {
-                binding.etLastNameSupplierSignUp.error = "Atleast 1 letter, atleast 3 character"
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
+                setError(binding.supplierLastNameContainer,
+                    "Atleast 1 letter, atleast 3 character")
+                showSignUpButton()
             }
-            if (!validateAgeInput(age)) {
-                binding.etEmailSupplierSignUp.error = "Invalid Age"
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
-                throw NumberFormatException()
-
+            if (validateAgeInput(age) != 0) {
+                if (validateAgeInput(age)==1)
+                    setError(binding.supplierAgeContainer,"age field is required")
+                    else if (validateAgeInput(age)==2) //gives more detail reason for error
+                        setError(binding.supplierAgeContainer,
+                            "you are too young to register")//edit this later
+                        else if (validateAgeInput(age) == 3)
+                            setError(binding.supplierAgeContainer,"enter a valid age")
+                showSignUpButton()
             }
             if (!validateEmailInput(email)) {
-                binding.etEmailSupplierSignUp.error = "Invalid email"
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
+                setError(binding.supplierEmailContainer,"Invalid email")
+                 showSignUpButton()
             }
             if (!validatePhoneInput(phoneNumber)) {
-                binding.etPhoneSupplierSignUp.error = "Starts with '0' followed by '7', '8' or '9' and 11 characters"
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
+                setError(binding.supplierPhoneContainer,
+                    "Starts with '0' followed by '7', '8' or '9' and 11 characters")
+                showSignUpButton()
             }
             if (!validateSex(gender)) {
-                binding.genderError.visibility = View.VISIBLE
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
-            }
-            if (validateSex(gender)) {
-                binding.genderError.visibility = View.GONE
+                setError(binding.supplierGenderContainer, "Gender must be male or female")
+                showSignUpButton()
             }
             if (!validatePasswordInput(password)) {
-                binding.etPasswordSupplierSignUp.error = "At least 1 uppercase, 1 lowercase, 1 special character 1 digit and at least 8 characters"
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
+                setError(binding.supplierPasswordContainer,
+                    "At least 1 uppercase, 1 lowercase, 1 special character 1 digit and at least 8 characters")
+                showSignUpButton()
             }
             if (!validateConfirmPassword(password, confirmPassword)) {
-                binding.etConfirmPasswordSupplierSignUp.error = "Password doesn't match"
-                binding.supplierSignupBtn.isEnabled = true
-                binding.supplierSignupBtn.text = "Register"
-                binding.supplierRegistrationProgressBar.visibility = View.GONE
+                setError(binding.supplierConfirmPasswordContainer, "Password doesn't match")
+                showSignUpButton()
             }
             if (validateFirstNameInput(firstName) &&
                 validateLastNameInput(lastName) &&
-                validateAgeInput(age) &&
+                validateAgeInput(age) == 0 &&
                 validateEmailInput(email) &&
                 validatePasswordInput(password) &&
                 validatePhoneInput(phoneNumber) &&
@@ -164,6 +162,25 @@ class SignUp : Fragment() {
                 }
             }
         }
+    }
+
+    private fun clearErrors() {
+        if (Errors.isEmpty()) return
+        for (err in Errors){
+            err.error = null
+        }
+    }
+
+
+    private fun setError(view: TextInputLayout, errorMessage:String) {
+        view.error = "* $errorMessage"
+        Errors.add(view)
+    }
+
+    private fun showSignUpButton() {
+        binding.supplierSignupBtn.isEnabled = true
+        binding.supplierSignupBtn.text = "Register"
+        binding.supplierRegistrationProgressBar.visibility = View.GONE
     }
 
     private fun dropDown() {
