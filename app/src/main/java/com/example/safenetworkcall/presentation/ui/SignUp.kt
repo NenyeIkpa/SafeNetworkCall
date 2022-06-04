@@ -17,10 +17,8 @@ import com.example.safenetworkcall.data.remote.model.User
 import com.example.safenetworkcall.databinding.FragmentSignUpBinding
 import com.example.safenetworkcall.presentation.viewmodel.SignUpViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.NumberFormatException
 
 @AndroidEntryPoint
 class SignUp : Fragment() {
@@ -85,10 +83,15 @@ class SignUp : Fragment() {
             val location = binding.etAddressSupplierSignUp.text.toString()
 //          userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age.toInt(), gender, email, password, confirmPassword, phoneNumber, Location(location)))
 
-            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User("Firstname", "Lastname", age, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
+            userInfo = SignUpUser("", User("Firstname", "Lastname", age, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
 
             Log.d("check", "onViewCreated: $userInfo ")
 
+            if (!validateCompanySelection(companyId)){
+                setError(binding.supplierCompanyContainer,
+                "Select a company")
+                showSignUpButton()
+            }
             if (!validateFirstNameInput(firstName)){
                 setError(binding.supplierFirstNameContainer,
                     "Should start with a capital letter, at least 3 character")
@@ -131,7 +134,8 @@ class SignUp : Fragment() {
                 setError(binding.supplierConfirmPasswordContainer, "Password doesn't match")
                 showSignUpButton()
             }
-            if (validateFirstNameInput(firstName) &&
+            if (validateCompanySelection(companyId)&&
+                validateFirstNameInput(firstName) &&
                 validateLastNameInput(lastName) &&
                 validateAgeInput(age) == 0 &&
                 validateEmailInput(email) &&

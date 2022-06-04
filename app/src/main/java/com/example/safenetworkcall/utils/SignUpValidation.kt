@@ -8,6 +8,12 @@ private var EMAIL_PATTERN = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-
 private val PHONE_PATTERN = Regex("^(?:234|0)([7-9][0-1])[1-9].......\$")
 private val PASSWORD_PATTERN = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,15}\$")
 
+fun validateCompanySelection(companyId: String): Boolean {
+    if (companyId.isNullOrEmpty()){
+        return false
+    }
+    return true
+}
 fun validateFirstNameInput(firstName: String): Boolean {
     if (firstName.length < 2 || !firstName.contains(NAMING_PATTERN)) {
         return false
