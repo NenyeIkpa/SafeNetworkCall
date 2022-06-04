@@ -147,7 +147,7 @@
                 android:layout_height="match_parent"
                 android:hint="Age"
                 android:lines="1"
-                android:inputType="phone"/>
+                android:inputType="number"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

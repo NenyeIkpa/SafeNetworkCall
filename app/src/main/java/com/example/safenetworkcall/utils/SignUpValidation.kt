@@ -1,5 +1,8 @@
 package com.example.safenetworkcall
 
+
+import java.lang.NumberFormatException
+
 private val NAMING_PATTERN = Regex("^[A-Z]{1}[a-z]{2,}\$")
 private var EMAIL_PATTERN = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\$")
 private val PHONE_PATTERN = Regex("^(?:234|0)([7-9][0-1])[1-9].......\$")
@@ -16,6 +19,12 @@ fun validateLastNameInput(lastName: String): Boolean {
         return false
     }
     return true
+}
+fun validateAgeInput(age: Int): Boolean {
+        if (age > 17 || age < 99) {
+            return true
+        }
+    return false
 }
 fun validateEmailInput(email: String): Boolean {
     if (email.isEmpty() || !email.matches(EMAIL_PATTERN)) {

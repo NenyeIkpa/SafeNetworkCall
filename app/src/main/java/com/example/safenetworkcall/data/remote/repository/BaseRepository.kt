@@ -53,5 +53,28 @@ abstract class BaseRepository {
         }
     }
 
+    //sample2
+
+    val TAG = "SAFE_API_REQUEST"
+    suspend fun <T> safeApiRequest(call: suspend () -> Response<T>): Resource<T> {
+        val response = call.invoke()
+        if (response.isSuccessful) {
+            return Resource.Success(response.body()!!)
+        } else {
+            val responseErr = response.raw().message
+            val message = StringBuilder()
+            responseErr.let {
+                try {
+                    message.append(JSONObject(it).getString("error"))
+                } catch (e: JSONException) {
+                    Log.d(TAG, "The error message: ${e.message}")
+                }
+            }
+            Log.d(TAG, "SafeApiRequest: $message")
+            throw Exception(message.toString())
+        }
+    }
+
+
 }
 

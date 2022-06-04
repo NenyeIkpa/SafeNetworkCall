@@ -18,6 +18,7 @@ import com.example.safenetworkcall.databinding.FragmentSignUpBinding
 import com.example.safenetworkcall.presentation.viewmodel.SignUpViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.NumberFormatException
 
 @AndroidEntryPoint
 class SignUp : Fragment() {
@@ -64,7 +65,7 @@ class SignUp : Fragment() {
             binding.supplierRegistrationProgressBar.visibility = View.VISIBLE
             val firstName = binding.etFirstNameSupplierSignUp.text.toString()
             val lastName = binding.etLastNameSupplierSignUp.text.toString()
-            val age = binding.etAgeSupplierSignUp.text.toString().toInt()
+            val age =  binding.etAgeSupplierSignUp.text.toString().toInt()
             val gender = binding.sexAutoTextView.text.toString()
             val email = binding.etEmailSupplierSignUp.text.toString()
             val companyName = binding.companyAutoTextView.text.toString()
@@ -73,64 +74,73 @@ class SignUp : Fragment() {
             val confirmPassword = binding.etConfirmPasswordSupplierSignUp.text.toString()
             val phoneNumber = binding.etPhoneSupplierSignUp.text.toString()
             val location = binding.etAddressSupplierSignUp.text.toString()
-            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age, gender, email, password, confirmPassword, phoneNumber, Location(location)))
+//            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age.toInt(), gender, email, password, confirmPassword, phoneNumber, Location(location)))
 
-//            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User("Firstname", "Lastname", 30, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
+            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User("Firstname", "Lastname", age, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
 
             Log.d("check", "onViewCreated: $userInfo ")
 
-//            if (!validateFirstNameInput(firstName)) {
-//                binding.etFirstNameSupplierSignUp.error = "Should start with a capital letter, at least 3 character"
-//                binding.supplierSignupBtn.isEnabled = true
-//                binding.supplierSignupBtn.text = "Register"
-//                binding.supplierRegistrationProgressBar.visibility = View.GONE
-//            }
-//            if (!validateLastNameInput(lastName)) {
-//                binding.etLastNameSupplierSignUp.error = "Atleast 1 letter, atleast 3 character"
-//                binding.supplierSignupBtn.isEnabled = true
-//                binding.supplierSignupBtn.text = "Register"
-//                binding.supplierRegistrationProgressBar.visibility = View.GONE
-//            }
-//            if (!validateEmailInput(email)) {
-//                binding.etEmailSupplierSignUp.error = "Invalid email"
-//                binding.supplierSignupBtn.isEnabled = true
-//                binding.supplierSignupBtn.text = "Register"
-//                binding.supplierRegistrationProgressBar.visibility = View.GONE
-//            }
-//            if (!validatePhoneInput(phoneNumber)) {
-//                binding.etPhoneSupplierSignUp.error = "Starts with '0' followed by '7', '8' or '9' and 11 characters"
-//                binding.supplierSignupBtn.isEnabled = true
-//                binding.supplierSignupBtn.text = "Register"
-//                binding.supplierRegistrationProgressBar.visibility = View.GONE
-//            }
-//            if (!validateSex(gender)) {
-//                binding.genderError.visibility = View.VISIBLE
-//                binding.supplierSignupBtn.isEnabled = true
-//                binding.supplierSignupBtn.text = "Register"
-//                binding.supplierRegistrationProgressBar.visibility = View.GONE
-//            }
-//            if (validateSex(gender)) {
-//                binding.genderError.visibility = View.GONE
-//            }
-//            if (!validatePasswordInput(password)) {
-//                binding.etPasswordSupplierSignUp.error = "At least 1 uppercase, 1 lowercase, 1 special character 1 digit and at least 8 characters"
-//                binding.supplierSignupBtn.isEnabled = true
-//                binding.supplierSignupBtn.text = "Register"
-//                binding.supplierRegistrationProgressBar.visibility = View.GONE
-//            }
-//            if (!validateConfirmPassword(password, confirmPassword)) {
-//                binding.etConfirmPasswordSupplierSignUp.error = "Password doesn't match"
-//                binding.supplierSignupBtn.isEnabled = true
-//                binding.supplierSignupBtn.text = "Register"
-//                binding.supplierRegistrationProgressBar.visibility = View.GONE
-//            }
-//            if (validateFirstNameInput(firstName) &&
-//                validateLastNameInput(lastName) &&
-//                validateEmailInput(email) &&
-//                validatePasswordInput(password) &&
-//                validatePhoneInput(phoneNumber) &&
-//                validateSex(gender)
-//            ) {
+            if (!validateFirstNameInput(firstName)) {
+                binding.etFirstNameSupplierSignUp.error = "Should start with a capital letter, at least 3 character"
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            }
+            if (!validateLastNameInput(lastName)) {
+                binding.etLastNameSupplierSignUp.error = "Atleast 1 letter, atleast 3 character"
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            }
+            if (!validateAgeInput(age)) {
+                binding.etEmailSupplierSignUp.error = "Invalid Age"
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+                throw NumberFormatException()
+
+            }
+            if (!validateEmailInput(email)) {
+                binding.etEmailSupplierSignUp.error = "Invalid email"
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            }
+            if (!validatePhoneInput(phoneNumber)) {
+                binding.etPhoneSupplierSignUp.error = "Starts with '0' followed by '7', '8' or '9' and 11 characters"
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            }
+            if (!validateSex(gender)) {
+                binding.genderError.visibility = View.VISIBLE
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            }
+            if (validateSex(gender)) {
+                binding.genderError.visibility = View.GONE
+            }
+            if (!validatePasswordInput(password)) {
+                binding.etPasswordSupplierSignUp.error = "At least 1 uppercase, 1 lowercase, 1 special character 1 digit and at least 8 characters"
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            }
+            if (!validateConfirmPassword(password, confirmPassword)) {
+                binding.etConfirmPasswordSupplierSignUp.error = "Password doesn't match"
+                binding.supplierSignupBtn.isEnabled = true
+                binding.supplierSignupBtn.text = "Register"
+                binding.supplierRegistrationProgressBar.visibility = View.GONE
+            }
+            if (validateFirstNameInput(firstName) &&
+                validateLastNameInput(lastName) &&
+                validateAgeInput(age) &&
+                validateEmailInput(email) &&
+                validatePasswordInput(password) &&
+                validatePhoneInput(phoneNumber) &&
+                validateSex(gender)
+            ) {
                 viewModel.registerSupplier(userInfo)
                 viewModel.signUpResponse.observe(viewLifecycleOwner) {
                     if (it.data?.success == true) {
@@ -154,7 +164,7 @@ class SignUp : Fragment() {
                 }
             }
         }
-//    }
+    }
 
     private fun dropDown() {
         val gender = resources.getStringArray(R.array.gender)
