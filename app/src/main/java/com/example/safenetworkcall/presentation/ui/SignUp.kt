@@ -19,7 +19,7 @@ import com.example.safenetworkcall.presentation.viewmodel.SignUpViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-
+private const val TAG = "TAG"
 @AndroidEntryPoint
 class SignUp : Fragment() {
 
@@ -75,18 +75,18 @@ class SignUp : Fragment() {
             //so instead just check if it is empty or check when value == "" then assign 0 to age
             val gender = binding.sexAutoTextView.text.toString()
             val email = binding.etEmailSupplierSignUp.text.toString()
-            val companyName = binding.companyAutoTextView.text.toString()
+            val companyName = binding.companyAutoTextView.text
             val companyId = binding.etCompanyId.text.toString()
             val password = binding.etPasswordSupplierSignUp.text.toString()
             val confirmPassword = binding.etConfirmPasswordSupplierSignUp.text.toString()
             val phoneNumber = binding.etPhoneSupplierSignUp.text.toString()
             val location = binding.etAddressSupplierSignUp.text.toString()
-//          userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User(firstName, lastName, age.toInt(), gender, email, password, confirmPassword, phoneNumber, Location(location)))
+          userInfo = SignUpUser(companyId, User(firstName, lastName, age, gender, email, password, confirmPassword, phoneNumber, Location(location)))
 
-            userInfo = SignUpUser("", User("Firstname", "Lastname", age, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
+//            userInfo = SignUpUser("ab278d49-50ed-403e-9a4a-e8ad2570766f", User("Firstname", "Lastname", age, "male", "nnabuike.ikpa@gmail.com", "Netizen@123","Netizen@123", "08037771010", Location("location")))
 
-            Log.d("check", "onViewCreated: $userInfo ")
-
+            Log.d(TAG, "onViewCreated: $userInfo ")
+//
             if (!validateCompanySelection(companyId)){
                 setError(binding.supplierCompanyContainer,
                 "Select a company")
@@ -161,6 +161,7 @@ class SignUp : Fragment() {
                         binding.supplierSignupBtn.isEnabled = true
                         binding.supplierSignupBtn.text = "Register"
                         binding.supplierRegistrationProgressBar.visibility = View.GONE
+                        Log.d(TAG, "onViewCreated: ${it.message.toString()}")
                         Snackbar.make(view, it.message.toString(), Snackbar.LENGTH_LONG).setAnchorView(binding.supplierSignupBtn).show()
                     }
                 }
@@ -203,7 +204,8 @@ class SignUp : Fragment() {
         }
         binding.companyAutoTextView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-                binding.etCompanyId.setText(companiesById.getValue(parent?.getItemAtPosition(position).toString()))
+                binding.etCompanyId.setText(companiesById.getValue(parent?.getItemAtPosition(position)
+                    .toString()))
             }
     }
 }

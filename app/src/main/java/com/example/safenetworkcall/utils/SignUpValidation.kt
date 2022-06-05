@@ -1,15 +1,13 @@
 package com.example.safenetworkcall
 
 
-import java.lang.NumberFormatException
-
 private val NAMING_PATTERN = Regex("^[A-Z]{1}[a-z]{2,}\$")
 private var EMAIL_PATTERN = Regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\$")
 private val PHONE_PATTERN = Regex("^(?:234|0)([7-9][0-1])[1-9].......\$")
 private val PASSWORD_PATTERN = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,15}\$")
 
 fun validateCompanySelection(companyId: String): Boolean {
-    if (companyId.isNullOrEmpty()){
+    if (companyId.isEmpty()){
         return false
     }
     return true

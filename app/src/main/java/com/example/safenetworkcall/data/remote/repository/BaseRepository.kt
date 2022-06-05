@@ -26,15 +26,15 @@ abstract class BaseRepository {
                 if (response.isSuccessful) {
                     Resource.Success(data = response.body()!!)
                 }else {
-                    val errorResponse = convertErrorBody(response.errorBody())
+                    val errorResponse = response.errorBody()?.charStream()?.readText()
                     Resource.Error(
-                        errorMessage = errorResponse?.toString() ?: "Unsuccessful. Try again"
+                        errorMessage = errorResponse.toString()
                     )
                 }
             }catch (e: HttpException) {
                 Resource.Error(errorMessage = e.message())
             }catch (e : IOException) {
-                Resource.Error(errorMessage = "Please check your network connection")
+                Resource.Error(errorMessage = "Please check your network")
             }catch (e: Exception) {
                 Resource.Error(errorMessage = "Something went wrong")
             }
@@ -42,38 +42,38 @@ abstract class BaseRepository {
 
     }
 
-    private fun convertErrorBody(errorBody : ResponseBody?) : SignUpResponse? {
-        return try {
-            errorBody?.source()?.let {
-                val moshiAdapter = Moshi.Builder().build().adapter(SignUpResponse::class.java)
-                moshiAdapter.fromJson(it)
-            }
-        }catch (e: Exception) {
-            null
-        }
-    }
+//    private fun convertErrorBody(errorBody : ResponseBody?) : SignUpResponse? {
+//        return try {
+//            errorBody?.source()?.let {
+//                val moshiAdapter = Moshi.Builder().build().adapter(SignUpResponse::class.java)
+//                moshiAdapter.fromJson(it)
+//            }
+//        }catch (e: Exception) {
+//            null
+//        }
+//    }
 
     //sample2
 
-    val TAG = "SAFE_API_REQUEST"
-    suspend fun <T> safeApiRequest(call: suspend () -> Response<T>): Resource<T> {
-        val response = call.invoke()
-        if (response.isSuccessful) {
-            return Resource.Success(response.body()!!)
-        } else {
-            val responseErr = response.raw().message
-            val message = StringBuilder()
-            responseErr.let {
-                try {
-                    message.append(JSONObject(it).getString("error"))
-                } catch (e: JSONException) {
-                    Log.d(TAG, "The error message: ${e.message}")
-                }
-            }
-            Log.d(TAG, "SafeApiRequest: $message")
-            throw Exception(message.toString())
-        }
-    }
+//    val TAG = "SAFE_API_REQUEST"
+//    suspend fun <T> safeApiRequest(call: suspend () -> Response<T>): Resource<T> {
+//        val response = call.invoke()
+//        if (response.isSuccessful) {
+//            return Resource.Success(response.body()!!)
+//        } else {
+//            val responseErr = response.raw().message
+//            val message = StringBuilder()
+//            responseErr.let {
+//                try {
+//                    message.append(JSONObject(it).getString("error"))
+//                } catch (e: JSONException) {
+//                    Log.d(TAG, "The error message: ${e.message}")
+//                }
+//            }
+//            Log.d(TAG, "SafeApiRequest: $message")
+//            throw Exception(message.toString())
+//        }
+//    }
 
 
 }

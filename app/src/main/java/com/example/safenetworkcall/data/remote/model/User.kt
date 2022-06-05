@@ -3,7 +3,7 @@ package com.example.safenetworkcall.data.remote.model
 data class User(
     val firstName: String,
     val lastName: String,
-    val age: Int = 0,
+    val age: Int,
     val gender: String,
     val email: String,
     val password: String,
