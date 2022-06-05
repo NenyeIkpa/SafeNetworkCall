@@ -34,7 +34,7 @@ abstract class BaseRepository {
             }catch (e: HttpException) {
                 Resource.Error(errorMessage = e.message())
             }catch (e : IOException) {
-                Resource.Error(errorMessage = "Please check your network")
+                Resource.Error(errorMessage = "Please check your network connection")
             }catch (e: Exception) {
                 Resource.Error(errorMessage = "Something went wrong")
             }
